@@ -13,11 +13,14 @@ object IotApp {
     val system = ActorSystem("iot-system")
 
     try {
+
       // Create top level supervisor
       val supervisor = system.actorOf(IotSupervisor.props(), "iot-supervisor")
 
       // Exit the system after ENTER is pressed
       StdIn.readLine()
+
+    //Clean up the Akka framework
     } finally {
       system.terminate()
     }
