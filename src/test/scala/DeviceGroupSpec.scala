@@ -39,7 +39,7 @@ class DeviceGroupSpec(_system: ActorSystem)
     probe.expectMsg(Device.TemperatureRecorded(requestId = 1))
   }
 
-  "DeviceGroup actor" should "ignore requests for wrong groupId" in {
+  it should "ignore requests for wrong groupId" in {
 
     val probe = TestProbe()
     val groupActor = system.actorOf(DeviceGroup.props("group"))
@@ -48,7 +48,7 @@ class DeviceGroupSpec(_system: ActorSystem)
     probe.expectNoMsg(500.milliseconds)
   }
 
-  "DeviceGroup actor" should "return same actor for same deviceId" in {
+  it should "return same actor for same deviceId" in {
 
       val probe = TestProbe()
       val groupActor = system.actorOf(DeviceGroup.props("group"))
@@ -64,7 +64,7 @@ class DeviceGroupSpec(_system: ActorSystem)
       deviceActor1 should ===(deviceActor2)
     }
 
-  "DeviceGroup actor" should "be able to list active devices" in {
+  it should "be able to list active devices" in {
 
     val probe = TestProbe()
     val groupActor = system.actorOf(DeviceGroup.props("group"))
@@ -79,13 +79,14 @@ class DeviceGroupSpec(_system: ActorSystem)
     probe.expectMsg(DeviceGroup.ReplyDeviceList(requestId = 0, Set("device1", "device2")))
   }
 
-  "DeviceGroup actor" should "be able to list active devices after one shuts down" in {
+  it should "be able to list active devices after one shuts down" in {
 
     val probe = TestProbe()
     val groupActor = system.actorOf(DeviceGroup.props("group"))
 
     groupActor.tell(DeviceManager.RequestTrackDevice("group", "device1"), probe.ref)
     probe.expectMsg(DeviceManager.DeviceRegistered)
+
     val toShutDown = probe.lastSender
 
     groupActor.tell(DeviceManager.RequestTrackDevice("group", "device2"), probe.ref)

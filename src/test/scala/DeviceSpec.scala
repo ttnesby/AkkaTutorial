@@ -32,7 +32,7 @@ class DeviceSpec(_system: ActorSystem)
     response.value should ===(None)
   }
 
-  "Device actor" should "reply with latest temperature reading" in {
+  it should "reply with latest temperature reading" in {
 
     val probe = TestProbe()
     val deviceActor = system.actorOf(Device.props("group", "device"))
@@ -58,7 +58,7 @@ class DeviceSpec(_system: ActorSystem)
     response2.value should ===(Some(55.0))
   }
 
-  "Device actor" should "reply to registration requests" in {
+  it should "reply to registration requests" in {
 
     val probe = TestProbe()
     val deviceActor = system.actorOf(Device.props("group", "device"))
@@ -68,7 +68,7 @@ class DeviceSpec(_system: ActorSystem)
     probe.lastSender should ===(deviceActor)
   }
 
-  "Device actor" should "ignore wrong registration requests" in {
+  it should "ignore wrong registration requests" in {
 
     val probe = TestProbe()
     val deviceActor = system.actorOf(Device.props("group", "device"))

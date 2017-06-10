@@ -38,13 +38,14 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
           deviceActor forward trackMsg
       }
 
-    case RequestTrackDevice(groupId, deviceId) =>
+    case RequestTrackDevice(groupId, _) =>
       log.warning(
         "Ignoring TrackDevice request for {}. This actor is responsible for {}.",
         groupId, this.groupId
       )
 
     case RequestDeviceList(requestId) =>
+      log.info(s"$sender has requested list of devices from $groupId")
       sender() ! ReplyDeviceList(requestId, deviceIdToActor.keySet)
 
     case Terminated(deviceActor) =>
