@@ -15,6 +15,8 @@ object Device {
 }
 
 class Device(groupId: String, deviceId: String) extends Actor with ActorLogging {
+
+  import DeviceManager._
   import Device._
 
   var lastTemperatureReading: Option[Double] = None
@@ -23,6 +25,15 @@ class Device(groupId: String, deviceId: String) extends Actor with ActorLogging 
   override def postStop(): Unit = log.info("Device actor {}-{} stopped", groupId, deviceId)
 
   override def receive: Receive = {
+
+    case RequestTrackDevice(`groupId`, `deviceId`) =>
+      sender() ! DeviceRegistered
+
+    case RequestTrackDevice(groupId, deviceId) =>
+      log.warning(
+        "Ignoring TrackDevice request for {}-{}.This actor is responsible for {}-{}.",
+        groupId, deviceId, this.groupId, this.deviceId
+      )
 
     case RecordTemperature(id, value) =>
       log.info("Recorded temperature reading {} with {}", value, id)
